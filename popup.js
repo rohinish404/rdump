@@ -1,6 +1,7 @@
 const dmp_all_btn = document.getElementById("dmp_all_btn")
 const dmp_btn = document.getElementById("dmp_btn")
 const all_tabs = document.getElementById("all_tabs")
+const fileInput = document.getElementById("fileInput")
 var textFile = null
 chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
   tabs.forEach((tab, index) => {
@@ -46,19 +47,58 @@ function downloadTabs(tabs){
     }
   });
 }
+function readFileToArray(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const contents = event.target.result;
+      const linesArray = contents.split('\n');
+      resolve(linesArray);
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    reader.readAsText(file);
+  });
+}
 function dump(){
+
   const checkedItems = Array.from(document.querySelectorAll('input[name="tabs"]:checked'))
   .map(checkbox => JSON.parse(checkbox.value));
 
   checkedItems.forEach((tab) => {
-      const elem = document.createElement('div')
-      elem.innerHTML = `<p>${tab.url}</p>`
-      all_tabs.appendChild(elem)
-    })
+    const elem = document.createElement('div')
+    elem.innerHTML = `<p>${tab.url}</p>`
+    all_tabs.appendChild(elem)
+  })
   downloadTabs(checkedItems)
 }
 
-function load(){}
+
+
+function load() {
+  fileInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const tabsArray = await readFileToArray(file);
+        const elem = document.createElement('div');
+        elem.innerHTML = `<p>${tabsArray.join(', ')}</p>`;
+        all_tabs.appendChild(elem);
+        console.log('File contents as array:', tabsArray);
+        
+        tabsArray.forEach((tab) => {
+          chrome.tabs.create({ url: tab });
+        });
+      } catch (error) {
+        console.error('Error reading file:', error);
+      }
+    }
+  });
+}
 
 function dumpAll(){
   all_tabs.innerHTML = ''
@@ -70,3 +110,4 @@ function dumpAll(){
 
 dmp_all_btn.addEventListener('click',dumpAll)
 dmp_btn.addEventListener('click',dump)
+load()
