@@ -3,25 +3,46 @@ const dmp_btn = document.getElementById("dmp_btn")
 const all_tabs = document.getElementById("all_tabs")
 const fileInput = document.getElementById("fileInput")
 var textFile = null
+const style = document.createElement('style');
+style.textContent = `
+.tab-item {
+display: flex;
+align-items: center;
+margin-bottom: 10px;
+}
+
+.tab-label {
+font-family: Arial, sans-serif;
+font-size: 14px;
+cursor: pointer;
+}
+`;
+document.head.appendChild(style);
+
 chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
   tabs.forEach((tab, index) => {
+    const tabItem = document.createElement('div');
+    tabItem.className = 'tab-item';
+
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.id = `tab${index}`;
     checkbox.name = 'tabs';
     checkbox.value = JSON.stringify(tab);
+    checkbox.className = 'tab-checkbox';
 
     const label = document.createElement('label');
     label.htmlFor = `tab${index}`;
-    label.appendChild(document.createTextNode(tab.url));
+    label.className = 'tab-label';
+    label.appendChild(document.createTextNode(tab.title));
 
-    all_tabs.appendChild(checkbox);
-    all_tabs.appendChild(label);
-    all_tabs.appendChild(document.createElement('br'));
-  })
-
+    tabItem.appendChild(checkbox);
+    tabItem.appendChild(label);
+    all_tabs.appendChild(tabItem);
+    all_tabs.appendChild(document.createElement('hr'));
+  });
 });
-function downloadTabs(tabs){
+function downloadTabs(tabs, file_name){
   let text = tabs.map(tab => tab.url).join('\n')
 
   let data = new Blob([text], {type: 'text/plain'});
@@ -32,10 +53,9 @@ function downloadTabs(tabs){
 
   textFile = window.URL.createObjectURL(data);
 
-  const date = new Date().toISOString().slice(0,10);
   const options = {
     url: textFile,
-    filename: `tabs_${date}.txt`,
+    filename: `${file_name}.txt`,
 
   };
 
@@ -65,16 +85,11 @@ function readFileToArray(file) {
   });
 }
 function dump(){
-
+  const file_name = document.getElementById("file_name")
   const checkedItems = Array.from(document.querySelectorAll('input[name="tabs"]:checked'))
   .map(checkbox => JSON.parse(checkbox.value));
 
-  checkedItems.forEach((tab) => {
-    const elem = document.createElement('div')
-    elem.innerHTML = `<p>${tab.url}</p>`
-    all_tabs.appendChild(elem)
-  })
-  downloadTabs(checkedItems)
+  downloadTabs(checkedItems, file_name.value)
 }
 
 
@@ -85,11 +100,7 @@ function load() {
     if (file) {
       try {
         const tabsArray = await readFileToArray(file);
-        const elem = document.createElement('div');
-        elem.innerHTML = `<p>${tabsArray.join(', ')}</p>`;
-        all_tabs.appendChild(elem);
-        console.log('File contents as array:', tabsArray);
-        
+
         tabsArray.forEach((tab) => {
           chrome.tabs.create({ url: tab });
         });
@@ -101,9 +112,10 @@ function load() {
 }
 
 function dumpAll(){
-  all_tabs.innerHTML = ''
+  const file_name = document.getElementById("file_name")
+
   chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-    downloadTabs(tabs)
+    downloadTabs(tabs, file_name.value)
   });
 
 }
