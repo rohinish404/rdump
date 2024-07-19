@@ -1,5 +1,25 @@
+const dmp_all_btn = document.getElementById("dmp_all_btn")
 const dmp_btn = document.getElementById("dmp_btn")
 const all_tabs = document.getElementById("all_tabs")
+var textFile = null
+chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
+  tabs.forEach((tab, index) => {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `tab${index}`;
+    checkbox.name = 'tabs';
+    checkbox.value = JSON.stringify(tab);
+
+    const label = document.createElement('label');
+    label.htmlFor = `tab${index}`;
+    label.appendChild(document.createTextNode(tab.url));
+
+    all_tabs.appendChild(checkbox);
+    all_tabs.appendChild(label);
+    all_tabs.appendChild(document.createElement('br'));
+  })
+
+});
 function downloadTabs(tabs){
   let text = tabs.map(tab => tab.url).join('\n')
 
@@ -15,9 +35,8 @@ function downloadTabs(tabs){
   const options = {
     url: textFile,
     filename: `tabs_${date}.txt`,
-  
-  };
 
+  };
 
   chrome.downloads.download(options, (downloadId) => {
     if (chrome.runtime.lastError) {
@@ -28,18 +47,26 @@ function downloadTabs(tabs){
   });
 }
 function dump(){
-  all_tabs.innerHTML = ''
-  chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
-    tabs.forEach((tab) => {
+  const checkedItems = Array.from(document.querySelectorAll('input[name="tabs"]:checked'))
+  .map(checkbox => JSON.parse(checkbox.value));
+
+  checkedItems.forEach((tab) => {
       const elem = document.createElement('div')
       elem.innerHTML = `<p>${tab.url}</p>`
       all_tabs.appendChild(elem)
     })
+  downloadTabs(checkedItems)
+}
+
+function load(){}
+
+function dumpAll(){
+  all_tabs.innerHTML = ''
+  chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, (tabs) => {
     downloadTabs(tabs)
   });
+
 }
-var textFile = null
 
-
-
+dmp_all_btn.addEventListener('click',dumpAll)
 dmp_btn.addEventListener('click',dump)
