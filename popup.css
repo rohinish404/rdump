@@ -316,3 +316,15 @@ hr {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* make the filename field look disabled when clipboard mode is on */
+input[type="text"]:disabled {
+  background-color: rgba(10, 10, 18, 0.3); /* darker fill */
+  color: rgba(100, 100, 100, 0.7);          /* grey text */
+  border-color: rgba(100, 100, 100, 0.5);   /* grey border */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+input[type="text"]:disabled::placeholder {
+  color: rgba(150, 150, 150, 0.5);
+}

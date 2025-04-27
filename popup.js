@@ -26,9 +26,18 @@ document.head.appendChild(style);
 // disable filename input when “Copy to Clipboard” is selected
 outputRadios.forEach(radio => {
   radio.addEventListener('change', () => {
-    fileNameInput.disabled = (radio.value === 'clipboard');
+    const isClipboard = radio.value === 'clipboard';
+
+    // 1) enable/disable filename field
+    fileNameInput.disabled = isClipboard;
+
+    // 2) swap button text
+    dmp_btn.textContent     = isClipboard ? 'COPY_SELECTED' : 'EXPORT_SELECTED';
+    dmp_all_btn.textContent = isClipboard ? 'COPY_ALL'      : 'EXPORT_ALL';
   });
 });
+
+
 
 // list all tabs in current window
 chrome.tabs.query({windowId: chrome.windows.WINDOW_ID_CURRENT}, tabs => {
