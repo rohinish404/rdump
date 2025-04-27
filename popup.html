@@ -4,14 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>RDUMP_v0.3</title>
+    <title>RDUMP_v0.4</title>
     <link rel="stylesheet" href="popup.css">
   </head>
   <body>
     <div class="container">
       <div class="title">RDUMP</div>
       <div id="all_tabs"></div>
-      <input id="file_name" type="text" placeholder="DESTINATION_FILE_NAME (MANDATORY)" required/>
+
+      <!-- output-mode toggle -->
+      <div id="output-mode" style="margin-bottom: 15px;">
+        <label>
+          <input type="radio" name="output_mode" value="file" checked>
+          Save to File
+        </label>
+        <label style="margin-left: 10px;">
+          <input type="radio" name="output_mode" value="clipboard">
+          Copy to Clipboard
+        </label>
+      </div>
+
+      <input id="file_name" type="text" placeholder="DESTINATION_FILE_NAME (IF SAVING TO FILE)" required/>
       <div id="btns">      
         <button id="dmp_btn">EXPORT_SELECTED</button>
         <button id="dmp_all_btn">EXPORT_ALL</button>
