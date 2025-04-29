@@ -1,0 +1,330 @@
+:root {
+  --neon-cyan: #00f0ff;
+  --neon-pink: #ff00a0;
+  --dark-bg: #0a0a12;
+  --terminal-green: #00ff8c;
+  --grid-color: rgba(0, 240, 255, 0.1);
+  --checkbox-color: #ff5500;
+}
+
+body {
+  font-family: "Consolas", "Monaco", "Lucida Console", "SF Mono", "Roboto Mono", "Courier New", monospace;
+  background-color: var(--dark-bg);
+  color: var(--neon-cyan);
+  margin: 0;
+  padding: 0;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+}
+
+.container {
+  max-width: 350px;
+  margin: 0;
+  padding: 15px;
+  border: 1px solid var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: "RDUMP_SYS v0.4";
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 10px;
+  color: var(--neon-pink);
+  opacity: 0.7;
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+  animation: scan-line 2s linear infinite;
+}
+
+@keyframes scan-line {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+#all_tabs {
+  padding: 10px;
+  margin-bottom: 15px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid rgba(255, 0, 160, 0.3);
+  border-radius: 5px;
+  background-color: rgba(10, 10, 18, 0.7);
+  width: calc(100% - 22px);
+}
+
+#all_tabs::-webkit-scrollbar {
+  width: 6px;
+}
+
+#all_tabs::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+#all_tabs::-webkit-scrollbar-thumb {
+  background: var(--neon-pink);
+  border-radius: 3px;
+}
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  padding-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tab-label {
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--checkbox-color);
+  border-radius: 2px;
+  margin-right: 10px;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+input[type="checkbox"]:checked {
+  background-color: rgba(255, 85, 0, 0.2);
+}
+
+input[type="checkbox"]:checked::before {
+  content: "✔";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--terminal-green);
+  font-size: 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: rgba(10, 10, 18, 0.7);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: var(--terminal-green);
+  font-family: inherit;
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 0, 160, 0.5);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 10px rgba(255, 0, 160, 0.3);
+}
+
+#btns {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--neon-cyan);
+  border-radius: 5px;
+  color: var(--neon-cyan);
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  background-color: rgba(0, 240, 255, 0.1);
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+  box-shadow: 0 0 15px rgba(255, 0, 160, 0.3);
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+  transition: all 0.5s;
+}
+
+button:hover::after {
+  left: 100%;
+}
+
+.divider {
+  text-align: center;
+  margin: 15px 0;
+  position: relative;
+  color: var(--neon-pink);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: rgba(0, 240, 255, 0.3);
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+#fileInput {
+  width: 100%;
+  padding: 8px;
+  background-color: rgba(10, 10, 18, 0.7);
+  border: 1px dashed var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-family: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+#fileInput:hover {
+  border-color: var(--neon-pink);
+}
+
+#fileInput:focus {
+  outline: none;
+}
+
+hr {
+  border: none;
+  border-top: 1px dashed rgba(0, 240, 255, 0.2);
+  margin: 5px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 20px;
+  text-align: left;
+  margin-bottom: 15px;
+  color: var(--neon-pink);
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding-left: 5px;
+}
+
+.title::before, .title::after {
+  content: "RDUMP";
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+.title::before {
+  color: var(--neon-cyan);
+  animation: subtle-glitch 3s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  transform: translate(-1px);
+}
+
+.title::after {
+  color: var(--neon-pink);
+  animation: subtle-glitch 3s infinite;
+  clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+  transform: translate(1px);
+}
+
+@keyframes subtle-glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(-1px, -1px);
+  }
+  60% {
+    transform: translate(1px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.import-label {
+  color: var(--neon-pink);
+  font-size: 12px;
+  margin: -10px 0 8px 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* make the filename field look disabled when clipboard mode is on */
+input[type="text"]:disabled {
+  background-color: rgba(10, 10, 18, 0.3); /* darker fill */
+  color: rgba(100, 100, 100, 0.7);          /* grey text */
+  border-color: rgba(100, 100, 100, 0.5);   /* grey border */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+input[type="text"]:disabled::placeholder {
+  color: rgba(150, 150, 150, 0.5);
+}

@@ -4,79 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>rdump</title>
-    <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 300px;
-      margin: 0 auto;
-      padding: 10px;
-    }
-    #all_tabs {
-      padding: 10px;
-      margin-bottom: 15px;
-      max-height: 200px;
-      overflow-y: auto;
-      overflow-x: auto;
-    }
-    input[type="checkbox"] {
-      margin-right: 10px;
-    } 
-    input[type="text"], button {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      background-color: transparent;
-      border: 1px solid #000;
-      border-radius: 5px;
-      box-sizing: border-box;
-
-    }
-    .divider {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    #fileInput {
-      padding: 7px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      font-size: 13px;
-      background-color: #f9f9f9;
-    }
-
-    #fileInput:hover {
-      border-color: #999;
-    }
-
-    #fileInput:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-    }
-    #btns {
-      display: flex;
-      gap: 5px;
-    }
-    </style>
+    <title>RDUMP_v0.4</title>
+    <link rel="stylesheet" href="popup.css">
   </head>
   <body>
     <div class="container">
+      <div class="title">RDUMP</div>
       <div id="all_tabs"></div>
-      <input id="file_name" type="text" placeholder="Enter file name..." required/>
-      <div id="btns">      
-        <button id="dmp_btn">Dump</button>
-        <button id="dmp_all_btn">Dump All</button>
+
+      <!-- output-mode toggle -->
+      <div id="output-mode" style="margin-bottom: 15px;">
+        <label>
+          <input type="radio" name="output_mode" value="file" checked>
+          Save to File
+        </label>
+        <label style="margin-left: 10px;">
+          <input type="radio" name="output_mode" value="clipboard">
+          Copy to Clipboard
+        </label>
       </div>
 
-      <div class="divider">or</div>
+      <input id="file_name" type="text" placeholder="DEST_FILENAME (REQUIRED IF SAVING TO FILE)" required/>
+      <div id="btns">      
+        <button id="dmp_btn">EXPORT_SELECTED</button>
+        <button id="dmp_all_btn">EXPORT_ALL</button>
+      </div>
+
+      <div class="divider">OR</div>
+      <div class="import-label">IMPORT LIST OF URLs</div>
       <input type="file" id="fileInput">
     </div>
     <script src="popup.js"></script>
   </body>
 </html>
-
